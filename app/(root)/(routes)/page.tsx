@@ -1,3 +1,5 @@
+import { UserButton } from "@clerk/nextjs";
+
 export default function Home() {
-  return <div className="text-3xl text-green-300">kocak</div>;
+  return <main className="">kocak</main>;
 }
