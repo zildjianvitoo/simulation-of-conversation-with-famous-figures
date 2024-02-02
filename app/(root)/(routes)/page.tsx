@@ -1,5 +1,9 @@
-import { UserButton } from "@clerk/nextjs";
+import SearchInput from "@/components/SearchInput";
 
 export default function Home() {
-  return <main className="">kocak</main>;
+  return (
+    <div className="h-full p-4 space-y-2">
+      <SearchInput />
+    </div>
+  );
 }

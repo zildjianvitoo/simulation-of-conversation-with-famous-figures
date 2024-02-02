@@ -2,18 +2,17 @@
 
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
-import { Menu } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import MobileSidebar from "./MobileSidebar";
 
 type Props = {};
 
 export default function Navbar({}: Props) {
   return (
-    <div className="w-full z-50 flex justify-between items-center py-2 px-4 border-b border-primary/10 bg-secondary ">
+    <div className="w-full z-50 flex justify-between items-center py-2 px-4 border-b border-primary/10 bg-secondary h-16 fixed">
       <div className="flex items-center">
-        <Menu className="block md:hidden" />
+        <MobileSidebar />
         <Link href={"/"}>
           <h1
             className={cn(
