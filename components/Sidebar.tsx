@@ -17,14 +17,12 @@ export default function Sidebar({}: Props) {
     },
     {
       icon: Plus,
-      href: "/buat",
+      href: "/tokoh-terkenal/buat",
       label: "Buat",
     },
   ];
 
   const onNavigate = (url: string) => {
-    //Todo Check Jika Pro
-
     router.push(url);
   };
 
