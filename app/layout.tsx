@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Outfit, Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const poppins = Poppins({
+const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={poppins.className}>
+        <body className={outfit.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
