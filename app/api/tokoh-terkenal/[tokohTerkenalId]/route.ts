@@ -2,14 +2,16 @@ import prismadb from "@/lib/prismadb";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-type Parameters = {
-  req: Request;
-  params: {
-    tokohTerkenalId: string;
-  };
-};
-
-export async function PATCH({ req, params }: Parameters) {
+export async function PATCH(
+  req: Request,
+  {
+    params,
+  }: {
+    params: {
+      tokohTerkenalId: string;
+    };
+  }
+) {
   try {
     const body = await req.json();
     const user = await currentUser();
