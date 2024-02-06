@@ -103,7 +103,7 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
   };
 
   return (
-    <div className="h-full p-4 space-y-2 max-w-4xl mx-auto">
+    <div className="h-full p-4 space-y-2 max-w-4xl mx-auto ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
