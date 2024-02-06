@@ -18,6 +18,32 @@ import { Input } from "./ui/input";
 import ImageUpload from "./ImageUpload";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 import { SelectValue } from "@radix-ui/react-select";
+import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
+import { Wand2 } from "lucide-react";
+import axios from "axios";
+import { useToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
+
+const PREAMBLE = `Anda adalah tokoh fiksi yang bernama Elon. Anda seorang wirausaha dan inventor visioner. Anda memiliki semangat untuk eksplorasi luar angkasa, kendaraan listrik, energi berkelanjutan, dan kemajuan kemampuan manusia. Saat ini, Anda sedang berbicara dengan seseorang yang sangat penasaran tentang karya dan visi Anda. Anda ambisius dan berpikir ke depan, dengan sentuhan kecerdasan. Anda sangat bersemangat tentang inovasi dan potensi kolonisasi luar angkasa.
+`;
+
+const SEED_CHAT = `Manusia: Halo Elon, bagaimana harimu?
+
+Elon: Sibuk seperti biasa. Antara mengirim roket ke luar angkasa dan membangun masa depan kendaraan listrik, tidak pernah ada momen membosankan. Bagaimana denganmu?
+
+Manusia: Hanya hari biasa bagiku. Bagaimana kemajuan kolonisasi Mars?
+
+Elon: Kami membuat kemajuan! Tujuan kami adalah membuat kehidupan di berbagai planet. Mars adalah langkah logis berikutnya. Tantangannya besar, tetapi potensinya bahkan lebih besar.
+
+Manusia: Itu terdengar sangat ambisius. Apakah kendaraan listrik juga bagian dari gambaran besar ini?
+
+Elon: Tentu saja! Energi berkelanjutan sangat penting baik di Bumi maupun untuk koloni masa depan kita. Kendaraan listrik, seperti yang ada di Tesla, hanyalah awal. Kami tidak hanya mengubah cara kita mengemudi; kami mengubah cara kita hidup.
+
+Manusia: Sangat menarik melihat visimu terwujud. Adakah proyek atau inovasi baru yang membuatmu bersemangat?
+
+Elon: Selalu ada! Tapi saat ini, saya sangat bersemangat tentang Neuralink. Ini memiliki potensi untuk merevolusi cara kita berinteraksi dengan teknologi dan bahkan menyembuhkan kondisi neurologis.
+`;
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: "Nama tidak boleh kosong" }),
@@ -28,8 +54,8 @@ const FormSchema = z.object({
   seed: z
     .string()
     .min(200, { message: "Contoh percakapan minimal 200 karakter" }),
-  src: z.string().min(200, { message: "Gambar tidak boleh kosong" }),
-  categoryId: z.string().min(200, { message: "Kategori tidak boleh kosong" }),
+  src: z.string().min(1, { message: "Gambar tidak boleh kosong" }),
+  categoryId: z.string().min(1, { message: "Kategori tidak boleh kosong" }),
 });
 
 type Props = {
@@ -38,6 +64,9 @@ type Props = {
 };
 
 export default function FamousFigureForm({ categories, initialData }: Props) {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: initialData || {
@@ -52,8 +81,25 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = (formValues: z.infer<typeof FormSchema>) => {
-    console.log(formValues);
+  const onSubmit = async (formValues: z.infer<typeof FormSchema>) => {
+    try {
+      if (initialData) {
+        await axios.patch(`/api/tokoh-terkenal/${initialData.id}`, formValues);
+      } else {
+        await axios.post("/api/tokoh-terkenal", formValues);
+      }
+      toast({
+        description: "Sukses",
+      });
+      router.refresh();
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        description: "Terjadi kesalahan",
+      });
+    }
   };
 
   return (
@@ -97,7 +143,7 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
                   <FormLabel>Nama</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Cristiano Ronaldo"
+                      placeholder="Elon Musk"
                       disabled={isLoading}
                       {...field}
                     />
@@ -115,7 +161,7 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
                   <FormLabel>Deskripsi</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Seorang Pesepak bola asal Portugal yang bermain untuk Al Nasr"
+                      placeholder="CEO Tesla,SpaceX,X"
                       disabled={isLoading}
                       {...field}
                     />
@@ -158,9 +204,71 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
                   <FormDescription>
                     Pilih kategori Tokoh Terkenalmu
                   </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+          <div className="space-y-2 w-full">
+            <div>
+              <h3 className="font-medium text-lg">Konfigurasi</h3>
+              <p className="text-sm text-muted-foreground">
+                Instruksi detail bagaimana AI ini berperilaku
+              </p>
+            </div>
+            <Separator className="bg-primary/10" />
+            <FormField
+              name="instructions"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>Instruksi</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="bg-background resize-none"
+                      rows={7}
+                      disabled={isLoading}
+                      placeholder={PREAMBLE}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Gambarkan dengan detail latar belakang dari Tokoh Terkenalmu
+                    dan detail relevan lainnya
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="seed"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel>Contoh Pembicaraan</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="bg-background resize-none"
+                      rows={7}
+                      disabled={isLoading}
+                      placeholder={SEED_CHAT}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Gambarkan dengan detail latar belakang dari Tokoh Terkenalmu
+                    dan detail relevan lainnya
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full flex justify-center">
+            <Button size={"lg"} disabled={isLoading}>
+              {initialData ? "Edit Tokoh Terkenalmu" : "Buat Tokoh Terkenalmu"}
+              <Wand2 className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </form>
       </Form>

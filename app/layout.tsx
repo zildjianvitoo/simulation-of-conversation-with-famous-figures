@@ -3,6 +3,8 @@ import { Outfit, Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700"],
@@ -23,7 +25,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={outfit.className}>
+        <body className={cn("bg-secondary", outfit.className)}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -31,6 +33,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

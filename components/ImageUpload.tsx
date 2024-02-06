@@ -14,7 +14,9 @@ export default function ImageUpload({ onChange, value, disabled }: Props) {
     <NoSSR>
       <div className="flex space-y-4 flex-col w-full justify-center items-center">
         <CldUploadButton
-          onUpload={(result: any) => onChange(result.info.secure_url)}
+          onUpload={(result: any) => {
+            onChange(result.info.secure_url);
+          }}
           options={{
             maxFiles: 1,
           }}
