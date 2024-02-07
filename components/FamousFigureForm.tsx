@@ -209,7 +209,7 @@ export default function FamousFigureForm({ categories, initialData }: Props) {
               )}
             />
           </div>
-          <div className="space-y-2 w-full">
+          <div className="space-y-5 w-full">
             <div>
               <h3 className="font-medium text-lg">Konfigurasi</h3>
               <p className="text-sm text-muted-foreground">
