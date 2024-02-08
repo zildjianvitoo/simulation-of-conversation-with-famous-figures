@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -55,6 +55,37 @@ export async function PATCH(
     return NextResponse.json(companion);
   } catch (error) {
     console.log("[FAMOUS-FIGURE_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  {
+    params,
+  }: {
+    params: {
+      tokohTerkenalId: string;
+    };
+  }
+) {
+  try {
+    const user = await currentUser();
+
+    if (!user?.id) {
+      return new NextResponse("Anda belum login", { status: 401 });
+    }
+
+    const famousFigure = await prismadb.famousFigure.delete({
+      where: {
+        userId: user.id,
+        id: params.tokohTerkenalId,
+      },
+    });
+
+    return NextResponse.json(famousFigure);
+  } catch (error) {
+    console.log("[FAMOUS-FIGURE_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

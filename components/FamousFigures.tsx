@@ -30,7 +30,7 @@ export default function FamousFigures({ data }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5 xl:grid-cols-6">
+    <div className="grid space-x-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5 xl:grid-cols-6">
       {data.map((item) => (
         <Card
           key={item.id}
