@@ -50,7 +50,6 @@ model Message {
 
   famousFigureId String
   userId      String
-
   famousFigure FamousFigure @relation(fields: [famousFigureId],references: [id], onDelete: Cascade)
 
   @@index([famousFigureId])
