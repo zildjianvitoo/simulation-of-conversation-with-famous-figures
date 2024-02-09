@@ -1,5 +1,6 @@
 import FamousFigureForm from "@/components/FamousFigureForm";
 import prismadb from "@/lib/prismadb";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 type Props = {
   params: {
@@ -10,9 +11,16 @@ type Props = {
 export default async function TokohTerkenalIdPage({
   params: { tokohTerkenalId },
 }: Props) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return redirectToSignIn();
+  }
+
   const famousFigure = await prismadb.famousFigure.findUnique({
     where: {
       id: tokohTerkenalId,
+      userId,
     },
   });
 

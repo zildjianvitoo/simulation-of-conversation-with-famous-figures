@@ -38,6 +38,7 @@ export async function PATCH(
 
     const companion = await prismadb.famousFigure.update({
       where: {
+        userId: user.id,
         id: params.tokohTerkenalId,
       },
       data: {

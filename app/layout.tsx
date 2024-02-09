@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
