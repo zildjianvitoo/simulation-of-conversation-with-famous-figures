@@ -7,6 +7,7 @@ import { FormEvent, useState } from "react";
 import { useCompletion } from "ai/react";
 import ChatForm from "./ChatForm";
 import ChatMessages from "./ChatMessages";
+import { ChatMessageProps } from "./ChatMessage";
 
 type Props = {
   famousFigure: FamousFigure & {
@@ -18,31 +19,32 @@ type Props = {
 };
 
 export default function ChatClient({ famousFigure }: Props) {
-  const [messages, setMessages] = useState<any[]>(famousFigure.messages);
+  const [messages, setMessages] = useState<ChatMessageProps[]>(
+    famousFigure.messages
+  );
   const router = useRouter();
 
   const { input, isLoading, handleInputChange, handleSubmit, setInput } =
     useCompletion({
       api: `/api/chat/${famousFigure.id}`,
       onFinish(prompt, completion) {
-        const systemMessage = {
+        const systemMessage: ChatMessageProps = {
           role: "system",
           content: completion,
         };
 
         setMessages((prev) => [...prev, systemMessage]);
-        setInput("");
 
         router.refresh();
       },
     });
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    const userMessage = {
+    const userMessage: ChatMessageProps = {
       role: "user",
       content: input,
     };
-
+    setInput("");
     setMessages((prev) => [...prev, userMessage]);
     handleSubmit(e);
   };
