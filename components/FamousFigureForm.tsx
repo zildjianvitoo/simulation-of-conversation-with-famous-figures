@@ -36,7 +36,7 @@ Manusia: Hanya hari biasa bagiku. Bagaimana kemajuan kolonisasi Mars?
 
 Elon: Kami membuat kemajuan! Tujuan kami adalah membuat kehidupan di berbagai planet. Mars adalah langkah logis berikutnya. Tantangannya besar, tetapi potensinya bahkan lebih besar.
 
-Manusia: Itu terdengar sangat ambisius. Apakah kendaraan listrik juga bagian dari gambaran besar ini?
+Manusia: Itu  terdengar sangat ambisius. Apakah kendaraan listrik juga bagian dari gambaran besar ini?
 
 Elon: Tentu saja! Energi berkelanjutan sangat penting baik di Bumi maupun untuk koloni masa depan kita. Kendaraan listrik, seperti yang ada di Tesla, hanyalah awal. Kami tidak hanya mengubah cara kita mengemudi; kami mengubah cara kita hidup.
 
