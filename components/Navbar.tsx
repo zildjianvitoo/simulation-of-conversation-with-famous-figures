@@ -26,7 +26,7 @@ export default function Navbar({}: Props) {
       <div className="flex items-center gap-x-3">
         {/* <Button></Button> */}
         <ThemeToggle />
-        <UserButton afterSignOutUrl="/" />
+        <UserButton afterSignOutUrl="/masuk" />
       </div>
     </div>
   );
