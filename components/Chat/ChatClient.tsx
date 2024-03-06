@@ -22,12 +22,14 @@ export default function ChatClient({ famousFigure }: Props) {
   const [messages, setMessages] = useState<ChatMessageProps[]>(
     famousFigure.messages
   );
+
   const router = useRouter();
 
   const { input, isLoading, handleInputChange, handleSubmit, setInput } =
     useCompletion({
       api: `/api/chat/${famousFigure.id}`,
       onFinish(prompt, completion) {
+        console.log(completion);
         const systemMessage: ChatMessageProps = {
           role: "system",
           content: completion,

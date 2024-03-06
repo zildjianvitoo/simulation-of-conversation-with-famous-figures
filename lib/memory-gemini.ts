@@ -1,7 +1,8 @@
 import { Redis } from "@upstash/redis";
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
+import { TaskType } from "@google/generative-ai";
 
 export type CompanionKey = {
   companionName: string;
@@ -31,7 +32,12 @@ export class MemoryManager {
     const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX!);
 
     const vectorStore = await PineconeStore.fromExistingIndex(
-      new OpenAIEmbeddings({ openAIApiKey: process.env.OPEN_AI_KEY }),
+      new GoogleGenerativeAIEmbeddings({
+        modelName: "embedding-001",
+        taskType: TaskType.RETRIEVAL_DOCUMENT,
+        title: "Document title",
+        apiKey: process.env.GEMINI_API_KEY,
+      }),
       { pineconeIndex: pineconeIndex }
     );
 

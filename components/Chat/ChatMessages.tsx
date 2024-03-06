@@ -30,6 +30,7 @@ export default function ChatMessages({
   );
 
   useEffect(() => {
+    console.log(messages);
     const timeout = setTimeout(() => {
       setFakeLoading(false);
     }, 1000);
@@ -37,7 +38,7 @@ export default function ChatMessages({
     return () => {
       clearTimeout(timeout);
     };
-  }, []);
+  }, [messages]);
 
   return (
     <div className="flex-1 overflow-y-auto pr-4">
@@ -53,7 +54,7 @@ export default function ChatMessages({
           content={message.content}
           isLoading={isLoading}
           key={index}
-          src={message.src}
+          src={famousFigure.src}
         />
       ))}
       {isLoading && (
