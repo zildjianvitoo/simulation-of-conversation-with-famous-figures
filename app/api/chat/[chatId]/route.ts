@@ -242,19 +242,6 @@ export async function POST(
     // Setting verbose untuk debugging di terminal
     model.verbose = true;
 
-    //   .invoke(
-    //     `
-    //     ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.
-
-    //     ${companion.instructions}
-
-    //     Below are relevant details about ${companion.name}'s past and the conversation you are in.
-    //     ${relevantHistory}
-
-    //     ${recentChatHistory}\n${companion.name}:`
-    //   )
-    //   .catch(console.error);
-
     const resp = await model
       .invoke([
         [
@@ -270,17 +257,28 @@ export async function POST(
         ],
       ])
       .catch((err) => console.log(err));
+    //   .invoke(
+    //     `
+    //     ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.
 
-    console.log("Ini console server Response", resp);
+    //     ${companion.instructions}
+
+    //     Below are relevant details about ${companion.name}'s past and the conversation you are in.
+    //     ${relevantHistory}
+
+    //     ${recentChatHistory}\n${companion.name}:`
+    //   )
+    //   .catch(console.error);
     const response = resp?.lc_kwargs.content;
+    console.log("Ini console server Response", resp);
 
-    await memoryManager.writeToHistory("" + response.trim(), companionKey);
-    var Readable = await require("stream").Readable;
-
-    let s = new Readable();
-    s.push(response);
-    s.push(null);
     if (response !== undefined && response.length > 1) {
+      await memoryManager.writeToHistory("" + response.trim(), companionKey);
+      var Readable = await require("stream").Readable;
+
+      let s = new Readable();
+      s.push(response);
+      s.push(null);
       memoryManager.writeToHistory("" + response.trim(), companionKey);
 
       await prismadb.famousFigure.update({
@@ -297,6 +295,7 @@ export async function POST(
           },
         },
       });
+      return new StreamingTextResponse(s);
     }
 
     // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
@@ -323,7 +322,6 @@ export async function POST(
     // });
 
     // console.log("Ini console server", s);
-    return new StreamingTextResponse(s);
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Error", { status: 500 });
