@@ -1,7 +1,6 @@
 import { StreamingTextResponse, LangChainStream } from "ai";
-import { auth, currentUser } from "@clerk/nextjs";
-import { Replicate } from "@langchain/community/llms/replicate";
-import { CallbackManager } from "langchain/callbacks";
+import { currentUser } from "@clerk/nextjs";
+
 import { NextResponse } from "next/server";
 import { MemoryManager } from "@/lib/memory-gemini";
 import { rateLimit } from "@/lib/rate-limit";
@@ -236,7 +235,8 @@ export async function POST(
       modelName: "gemini-pro",
       maxOutputTokens: 2048,
       apiKey: process.env.GEMINI_API_KEY,
-      callbacks: [new ConsoleCallbackHandler()],
+      // callbacks: [new ConsoleCallbackHandler()],
+      // streaming: true
     });
 
     // Setting verbose untuk debugging di terminal
@@ -257,18 +257,7 @@ export async function POST(
         ],
       ])
       .catch((err) => console.log(err));
-    //   .invoke(
-    //     `
-    //     ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix.
 
-    //     ${companion.instructions}
-
-    //     Below are relevant details about ${companion.name}'s past and the conversation you are in.
-    //     ${relevantHistory}
-
-    //     ${recentChatHistory}\n${companion.name}:`
-    //   )
-    //   .catch(console.error);
     const response = resp?.lc_kwargs.content;
     console.log("Ini console server Response", resp);
 
@@ -297,31 +286,6 @@ export async function POST(
       });
       return new StreamingTextResponse(s);
     }
-
-    // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
-    // const geminiStream = await genAI
-    //   .getGenerativeModel({ model: "gemini-pro" })
-    //   .generateContentStream(buildGoogleGenAIPrompt(prompt));
-
-    // const stream = GoogleGenerativeAIStream(geminiStream);
-
-    // await prismadb.famousFigure.update({
-    //   where: {
-    //     id: params.chatId,
-    //   },
-    //   data: {
-    //     messages: {
-    //       create: {
-    //         content: streamString,
-    //         role: "system",
-    //         userId: user.id,
-    //       },
-    //     },
-    //   },
-    // });
-
-    // console.log("Ini console server", s);
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Error", { status: 500 });

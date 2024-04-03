@@ -1,6 +1,6 @@
-Clerk Authentication: https://bit.ly/3Kmyytc
-Hotpot for AI Character Images: https://hotpot.ai/
-Inspiration for the project: https://github.com/a16z-infra/companion-app
+- Clerk Authentication: https://bit.ly/3Kmyytc
+- Hotpot for AI Character Images: https://hotpot.ai/
+- Inspiration for the project: https://github.com/a16z-infra/companion-app
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
