@@ -12,7 +12,6 @@ export const buildGoogleGenAIPrompt = (messages: Message[]) => ({
 });
 
 export async function streamToString(stream: any) {
-  // lets have a ReadableStream as a stream variable
   const chunks = [];
 
   for await (const chunk of stream) {
